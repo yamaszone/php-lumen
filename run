@@ -3,6 +3,7 @@
 help(){
 	echo "Usage:"
 	printf "\t app\t\t: Lanuch Lumen app.\n"
+	printf "\t tests\t\t: Run tests.\n"
 	printf "\t h, help\t: Show this help.\n"
 	exit 0
 }
@@ -15,6 +16,9 @@ fi
 case $1 in
 	app)
 		docker run -d -p 8000:80 --name php-lumen yamaszone/php-lumen:latest
+		;;
+	tests)
+		vendor/bats/bin/bats tests/bats/
 		;;
 	* | h | help)
 		help
