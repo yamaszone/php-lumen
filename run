@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# NOTE: Use Docker Hub as default in the future.
-if [[ -z $DOCKER_REGISTRY_URI ]]; then
-	printf "Set Docker registry ENV VAR: 'export DOCKER_REGISTRY_URI=<Registry URI>'\n"
-	exit 1
-fi
-DOCKER_REGISTRY=$DOCKER_REGISTRY_URI
-
 help(){
 	echo "Usage:"
 	printf "\t app\t\t: Lanuch Lumen app.\n"
@@ -21,7 +14,7 @@ fi
 
 case $1 in
 	app)
-	    docker run -d -p 8000:80 --name php-lumen ${DOCKER_REGISTRY}/php-lumen:latest
+		docker run -d -p 8000:80 --name php-lumen yamaszone/php-lumen:latest
 		;;
 	* | h | help)
 		help
