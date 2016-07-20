@@ -5,4 +5,4 @@ machine:
 test:
   override:
     - docker run -d -p 8000:80 --name php-lumen yamaszone/php-lumen:latest; sleep 10
-    - vendor/bats/bin/bats tests/bats/
+    - /home/ubuntu/php-lumen/run tests
