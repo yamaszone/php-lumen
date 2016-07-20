@@ -21,5 +21,6 @@ load test_helper
 	run docker exec php-lumen /bin/bash -c "lumen --version"
 	assert_contains "$output" "Lumen Installer version 1.0"
 
-	#run docker rm -f php-lumen
+	# Tearing down container spun up by test
+	run docker rm -f php-lumen
 }
