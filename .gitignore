@@ -2,7 +2,6 @@
 *.diff
 
 # See: https://github.com/github/gitignore/blob/master/Laravel.gitignore
-vendor/
 node_modules/
 
 # Laravel 4 specific
