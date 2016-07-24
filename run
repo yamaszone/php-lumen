@@ -2,8 +2,9 @@
 
 help(){
 	echo "Usage:"
-	printf "\t app\t\t: Lanuch Lumen app.\n"
-	printf "\t tests\t\t: Run tests.\n"
+	printf "\t a, app\t\t: Lanuch Lumen app.\n"
+	printf "\t e, app\t\t: Enter Lumen container.\n"
+	printf "\t t, tests\t: Run tests.\n"
 	printf "\t h, help\t: Show this help.\n"
 	exit 0
 }
@@ -14,10 +15,14 @@ if [[ -z $1 ]];then
 fi
 
 case $1 in
-	app)
-		docker run -d -p 8000:80 --name php-lumen yamaszone/php-lumen:latest
+	a | app)
+		docker rm -f php-lumen > /dev/null 2>&1
+		docker run -d -p 8000:80 -v /workspace/php-lumen/app:/var/www/html --name php-lumen yamaszone/php7-lumen:latest
 		;;
-	tests)
+	e | enter)
+		docker exec -it php-lumen /bin/bash -c "cd /var/www/html && /bin/bash"
+		;;
+	t | tests)
 		vendor/bats/bin/bats tests/bats/
 		;;
 	* | h | help)
