@@ -4,7 +4,11 @@ help(){
 	echo "Usage:"
 	printf "\t a, app\t\t: Lanuch Lumen app.\n"
 	printf "\t e, app\t\t: Enter Lumen container.\n"
+	printf "\t config-apache\t: Configure apache on the fly.\n"
+	printf "\t example\t: Send an example request to sample Lumen app.\n"
+	printf "\t restart-apache\t: Restart apache on demand.\n"
 	printf "\t t, tests\t: Run tests.\n"
+	printf "\t ws, webserver\t: Launch PHP's native webserver to help debugging using localhost.\n"
 	printf "\t h, help\t: Show this help.\n"
 	exit 0
 }
@@ -14,16 +18,38 @@ if [[ -z $1 ]];then
 	exit 0
 fi
 
+restart_apache(){
+	docker exec php-lumen /bin/bash -c "apachectl -k restart"
+}
+
+configure_apache(){
+	# TODO: Configure apache during bootstrap to get rid of bandaid below
+	docker exec php-lumen /bin/bash -c "sed -i -e 's/\/var\/www\/html$/\/var\/www\/html\/public/g' /etc/apache2/sites-available/default-ssl.conf && sed -i -e 's/\/var\/www\/html$/\/var\/www\/html\/public/g' /etc/apache2/sites-available/000-default.conf && sed -i -e 's/\AllowOverride None$/AllowOverride All/g' /etc/apache2/apache2.conf"
+}
 case $1 in
 	a | app)
 		docker rm -f php-lumen > /dev/null 2>&1
 		docker run -d -p 8000:80 -v /workspace/php-lumen/app:/var/www/html --name php-lumen yamaszone/php7-lumen:latest
 		;;
+	config-apache)
+		configure_apache
+		restart_apache
+		;;
 	e | enter)
 		docker exec -it php-lumen /bin/bash -c "cd /var/www/html && /bin/bash"
 		;;
+	example)
+		# See: http://nordicapis.com/build-api-lumen-micro-framework/
+		docker exec -it php-lumen /bin/bash -c "curl http://localhost:8000/encode?value=encodeexampletext; echo"
+		;;
+	restart-apache)
+		restart_apache
+		;;
 	t | tests)
 		vendor/bats/bin/bats tests/bats/
+		;;
+	ws | webserver)
+		docker exec -it php-lumen /bin/bash -c "cd /var/www/html && php -S localhost:8000 -t public/"
 		;;
 	* | h | help)
 		help
