@@ -3,7 +3,7 @@
 help(){
 	echo "Usage:"
 	printf "\t a, app\t\t: Lanuch Lumen app.\n"
-	printf "\t e, app\t\t: Enter Lumen container.\n"
+	printf "\t e, enter\t: Enter Lumen container.\n"
 	printf "\t config-apache\t: Configure apache on the fly.\n"
 	printf "\t example\t: Send an example request to sample Lumen app.\n"
 	printf "\t restart-apache\t: Restart apache on demand.\n"
